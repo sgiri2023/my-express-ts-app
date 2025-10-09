@@ -1,0 +1,17 @@
+// src/enums/ActionType.ts
+export enum ActionType {
+    CREATE_USER = "CREATE_USER",
+    UPDATE_USER = "UPDATE_USER",
+    ACTIVATE_USER = "ACTIVATE_USER",
+    DEACTIVATE_USER = "DEACTIVATE_USER",
+    DELETE_USER="DELETE_USER",
+    PROMOTE_GLOBALADMIN = "PROMOTE_GLOBALADMIN",
+    // ========================
+    CREATE_GROUP = "CREATE_GROUP",
+    UPDATE_GROUP = "UPDATE_GROUP",
+    DEACTIVATE_GROUP = "DEACTIVATE_GROUP",
+    // ========================
+    ASSIGN_ROLE = "ASSIGN_ROLE",
+    REMOVE_ROLE = "REMOVE_ROLE",
+    CHANGE_ROLE = "CHANGE_ROLE"
+}
