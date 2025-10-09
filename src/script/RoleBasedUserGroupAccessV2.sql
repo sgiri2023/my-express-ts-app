@@ -99,6 +99,68 @@ CREATE TABLE UserGroupAccessAuditLog (
     FOREIGN KEY (group_id) REFERENCES UserGroups(group_id)
 );
 
+
+-- ======================
+-- Notification System
+-- ======================
+
+-- 1. Notification Types
+CREATE TABLE NotificationTypes (
+    type_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    type_name VARCHAR(100) NOT NULL UNIQUE, -- USER_ADDED, ROLE_CHANGED, SYSTEM_ALERT
+    description VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Notifications
+CREATE TABLE Notifications (
+    notification_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    actor_user_id BIGINT NULL,             -- who triggered it
+    type_id BIGINT NOT NULL,
+    message TEXT NOT NULL,
+    entity_type ENUM('USER', 'GROUP', 'ENTITY', 'ACCOUNTING_PERIOD', 'SYSTEM') DEFAULT 'SYSTEM',
+    entity_id BIGINT NULL,
+    is_system BOOLEAN DEFAULT FALSE,
+    target_scope ENUM('USER','GROUP','GLOBAL') DEFAULT 'USER',
+    priority ENUM('LOW','MEDIUM','HIGH') DEFAULT 'MEDIUM', -- HIGH = banner
+    link VARCHAR(255) NULL,                 -- optional link
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (actor_user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (type_id) REFERENCES NotificationTypes(type_id)
+);
+
+CREATE TABLE UserNotifications (
+    user_notification_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    notification_id BIGINT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    read_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (notification_id) REFERENCES Notifications(notification_id),
+    UNIQUE KEY unique_user_notification (user_id, notification_id)
+);
+-- 3. Notification Preferences
+CREATE TABLE NotificationPreferences (
+    preference_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    type_id BIGINT NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE,
+    preferred_channel ENUM('WEB','EMAIL','SMS','PUSH') DEFAULT 'WEB',
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (type_id) REFERENCES NotificationTypes(type_id)
+);
+
+-- 4. Notification Delivery Logs (optional for async delivery)
+CREATE TABLE NotificationDeliveryLogs (
+    delivery_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_notification_id BIGINT NOT NULL,  -- link to UserNotifications
+    channel ENUM('WEB','EMAIL','SMS','PUSH') NOT NULL,
+    status ENUM('PENDING','SENT','DELIVERED','FAILED') DEFAULT 'PENDING',
+    delivered_at TIMESTAMP NULL,
+    FOREIGN KEY (user_notification_id) REFERENCES UserNotifications(user_notification_id)
+);
+
 -- ======================
 -- Default Roles
 -- ======================
