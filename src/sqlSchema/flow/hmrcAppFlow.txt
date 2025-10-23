@@ -1,0 +1,20 @@
+Agent ──< Authorisations >── Client ──< Groups >──< Entities >
+                                          │
+                                          └──< AccountingPeriods >──< Filings >
+
+Quick checklist — what to add before production filing
+	1.	Request / response payloads (store raw JSON for every submission) — required for troubleshooting and audit.
+	2.	Idempotency key on submissions — prevent duplicate filings on retries.
+	3.	Encrypted token storage & rotation logs (use KMS) — HMRC tokens are sensitive.
+	4.	Webhooks table to accept/record HMRC async callbacks and signature verification.
+	5.	Obligations & deadlines table (so UI and scheduler can show deadlines).
+	6.	ETR / GLoBE info storage (per-jurisdiction computed outputs) — useful for UKTR / ORN / BTN.
+	7.	Audit logs for all important actions (create/submit/refresh/revoke).
+	8.	Attachments / supporting docs (store pointer to object store).
+	9.	Filing statuses & error messages expanded and normalized.
+	10.	Indexes and partitions for large tables (filing_submissions, audit_logs).
+	11.	Row-level security (RLS), tenant scoping & encryption at rest.
+	12.	Idempotency + retry strategy and rate-limit handling for HMRC API.
+	13.	Sandbox / environment flags to separate sandbox vs production HMRC apps.
+	14.	Obligation reconciliation & reconciliation logs.
+	15.	Retention & archival policies for payloads and attachments.
