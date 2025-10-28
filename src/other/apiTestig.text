@@ -1,0 +1,34 @@
+Get Client Credential Access Token
+
+curl --location 'https://test-api.service.hmrc.gov.uk/oauth/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--header 'Authorization: ••••••' \
+--data-urlencode 'grant_type=client_credentials' \
+--data-urlencode 'client_id=gdLG3pHZnYGeYGw2QayYLE2RnrTP' \
+--data-urlencode 'client_secret=b8027830-543e-45ea-ad79-fda22662225b'
+
+Create Test User - Agent
+curl --location 'https://test-api.service.hmrc.gov.uk/create-test-user/agents' \
+--header 'Authorization: Bearer c76eda6383c5a1628a2d7e15f7ae9266' \
+--header 'Content-Type: application/json' \
+--data '{
+    "serviceNames": [
+        "agent-services"
+    ]
+}'
+
+Create Test User Organisation
+curl --location 'https://test-api.service.hmrc.gov.uk/create-test-user/organisations' \
+--header 'Authorization: Bearer c76eda6383c5a1628a2d7e15f7ae9266' \
+--header 'Content-Type: application/json' \
+--data '{
+  "serviceNames": ["pillar-2"],
+  "eoriNumber": "GB987654321098",
+  "taxPayerType": "UK-RESIDENT",
+  "pillar2Id": "XGPLR3661594195"
+}
+
+List of available services
+curl --location 'https://test-api.service.hmrc.gov.uk/create-test-user/services' \
+--header 'Authorization: Bearer c76eda6383c5a1628a2d7e15f7ae9266' \
+--data ''
