@@ -32,3 +32,8 @@ List of available services
 curl --location 'https://test-api.service.hmrc.gov.uk/create-test-user/services' \
 --header 'Authorization: Bearer c76eda6383c5a1628a2d7e15f7ae9266' \
 --data ''
+
+| agent_id | client_id | access_token | refresh_token | expires_at |
+| -------- | --------- | ------------ | ------------- | ---------- |
+| A001     | C001      | token_1      | refresh_1     | ...        |
+| A001     | C002      | token_2      | refresh_2     | ...        |
