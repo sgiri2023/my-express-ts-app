@@ -37,3 +37,40 @@ curl --location 'https://test-api.service.hmrc.gov.uk/create-test-user/services'
 | -------- | --------- | ------------ | ------------- | ---------- |
 | A001     | C001      | token_1      | refresh_1     | ...        |
 | A001     | C002      | token_2      | refresh_2     | ...        |
+
+
+Tax Agent (Your HMRC-registered app)
+│
+├── Client A: ABC Holdings (authorised by client OAuth)
+│    │
+│    └── Group 1: ABC Holdings Group
+│         ├── Pillar 2 ID: PILLAR2-123456789
+│         │
+│         ├── Entities (linked under the group)
+│         │    ├── Entity 1: ABC UK Ltd
+│         │    ├── Entity 2: ABC Europe BV
+│         │    └── Entity 3: ABC USA Inc
+│         │
+│         └── Accounting Periods
+│              ├── Period 1: 01 Jan 2024 → 31 Dec 2024
+│              │    ├── Obligation Type: UK Tax Return (UKTR)
+│              │    ├── Status: Open / Fulfilled
+│              │    └── Submission ID: SUB-001
+│              ├── Period 2: 01 Jan 2025 → 31 Dec 2025
+│              │    ├── Obligation Type: GIR / ORN
+│              │    ├── Status: Open
+│              │    └── (pending submission)
+│              └── etc.
+│
+└── Client B: XYZ International (authorised separately)
+     │
+     └── Group 1: XYZ Group
+          ├── Pillar 2 ID: PILLAR2-987654321
+          ├── Entities:
+          │    ├── XYZ UK Ltd
+          │    ├── XYZ France SARL
+          │    └── XYZ Holdings Inc
+          └── Accounting Periods:
+               ├── 01 Apr 2024 → 31 Mar 2025 (UKTR submitted)
+               ├── 01 Apr 2025 → 31 Mar 2026 (open)
+               └── etc.
