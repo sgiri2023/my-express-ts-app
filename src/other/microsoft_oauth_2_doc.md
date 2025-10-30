@@ -229,11 +229,17 @@ const TENANT_ID = "contoso.onmicrosoft.com";
 const REDIRECT_URI = "https://yourapp.com/auth/callback";
 const SCOPE = "User.Read offline_access";
 
+/**
+ * 1️⃣ Generate Authorozation Url
+ */
 app.get("/auth/login", (req, res) => {
   const url = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&response_mode=query&scope=${SCOPE}&state=12345`;
   res.redirect(url);
 });
 
+/**
+ * 2️⃣ Exchange Authorization Code for Tokens
+ */
 app.get("/auth/callback", async (req, res) => {
   const { code } = req.query;
   const tokenResponse = await axios.post(
@@ -250,6 +256,32 @@ app.get("/auth/callback", async (req, res) => {
   res.json(tokenResponse.data);
 });
 
+/**
+ * 3️⃣ Exchange Refresh Token for New Access Token
+ */
+app.post("/auth/refresh", async (req, res) => {
+  try {
+    const { refresh_token } = req.body;
+
+    const params = new URLSearchParams({
+      grant_type: "refresh_token",
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      refresh_token,
+      scope: SCOPE,
+    });
+
+    const response = await axios.post(TOKEN_URL, params, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error refreshing token:", error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to refresh token" });
+  }
+});
+
 app.listen(3000, () => console.log("Server running on port 3000"));
 ```
 
@@ -261,6 +293,7 @@ app.listen(3000, () => console.log("Server running on port 3000"));
 |------|---------|-----------|
 | 1 | Redirect user to sign in | `/oauth2/v2.0/authorize` |
 | 2 | Get access & refresh tokens | `/oauth2/v2.0/token` |
-| 3 | Call Microsoft Graph | `/v1.0/me` |
-| 4 | Refresh token | `/oauth2/v2.0/token` |
+| 3 | Exchange Refresh token for new token | `/auth/refresh` |
+| 4 | Call Microsoft Graph | `/v1.0/me` |
+| 5 | Refresh token | `/oauth2/v2.0/token` |
 
