@@ -60,7 +60,6 @@ GET https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
 | `client_id` | Your App (Client) ID |
 | `response_type` | `code` |
 | `redirect_uri` | Must match your registered URI |
-| `response_mode` | `query` or `form_post` |
 | `scope` | Scopes requested (e.g., `User.Read offline_access`) |
 | `state` | Random string to protect against CSRF |
 
@@ -70,7 +69,6 @@ GET https://login.microsoftonline.com/contoso.onmicrosoft.com/oauth2/v2.0/author
 client_id=11111111-2222-3333-4444-555555555555&
 response_type=code&
 redirect_uri=https://yourapp.com/auth/callback&
-response_mode=query&
 scope=User.Read offline_access&
 state=12345
 ```
