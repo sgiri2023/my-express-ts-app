@@ -1,0 +1,11 @@
+export enum NotificationActionType {
+  SENT = 'SENT',
+  DELIVERED = 'DELIVERED',
+  VIEWED = 'VIEWED',
+  CLICKED = 'CLICKED',
+  READ = 'READ',
+  DISMISSED = 'DISMISSED',
+  FAILED = 'FAILED',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
